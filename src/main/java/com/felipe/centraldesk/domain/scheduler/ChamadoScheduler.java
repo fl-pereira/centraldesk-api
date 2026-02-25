@@ -1,11 +1,13 @@
 package com.felipe.centraldesk.domain.scheduler;
 
+import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
 import com.felipe.centraldesk.domain.service.ChamadoService;
 
 @Component
+@EnableScheduling
 public class ChamadoScheduler {
 
     private final ChamadoService service;

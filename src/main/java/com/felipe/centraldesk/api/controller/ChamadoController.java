@@ -59,4 +59,14 @@ public class ChamadoController {
     public ResponseEntity<ChamadoResponse> resolver(@PathVariable Long id) {
         return ResponseEntity.ok(service.resolverChamado(id));
     }
+
+    @PatchMapping("/{id}/cancelar")
+    public ResponseEntity<ChamadoResponse> cancelar(@PathVariable Long id) {
+        return ResponseEntity.ok(service.cancelarChamado(id));
+    }
+
+    @PatchMapping("/{id}/reabrir")
+    public ResponseEntity<ChamadoResponse> reabrir(@PathVariable Long id) {
+        return ResponseEntity.ok(service.reabrirChamado(id));
+    }
 }

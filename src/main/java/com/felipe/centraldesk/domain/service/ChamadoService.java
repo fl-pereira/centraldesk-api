@@ -16,6 +16,7 @@ import com.felipe.centraldesk.domain.entity.Grupo;
 
 import com.felipe.centraldesk.api.dto.ChamadoResponse;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
@@ -78,7 +79,6 @@ public class ChamadoService {
                 .orElseThrow(() -> new RecursoNaoEncontradoException("Analista não encontrado"));
 
         chamado.assumir(analista); // regra dentro da entidade
-
         return toResponse(chamado);
     }
 
@@ -89,12 +89,35 @@ public class ChamadoService {
                 .orElseThrow(() -> new RecursoNaoEncontradoException("Chamado não encontrado"));
 
         chamado.resolver();
+        return toResponse(chamado);
+    }
 
+    @Transactional
+    public ChamadoResponse reabrirChamado(Long chamadoId) {
+        Chamado chamado = chamadoRepository.findById(chamadoId)
+                .orElseThrow(() -> new RecursoNaoEncontradoException("Chamado não encontrado"));
+
+        chamado.reabrir();
+        return toResponse(chamado);
+    }
+
+    @Transactional
+    public ChamadoResponse cancelarChamado(Long chamadoId) {
+        Chamado chamado = chamadoRepository.findById(chamadoId)
+                .orElseThrow(() -> new RecursoNaoEncontradoException("Chamado não encontrado"));
+
+        chamado.cancelar();
         return toResponse(chamado);
     }
 
     public void finalizarChamadosResolvidos() {
-        // implementação futura
+        LocalDateTime limite = LocalDateTime.now().minusDays(3);
+        List<Chamado> chamados = chamadoRepository.buscarResolvidosAntesDe(limite);
+
+        for (Chamado chamado : chamados) {
+            chamado.finalizarAutomaticamente();
+        }
+
     }
 
     private ChamadoResponse toResponse(Chamado chamado) {

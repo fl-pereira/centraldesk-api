@@ -186,28 +186,61 @@ public class Chamado {
         }
     }
 
+    public void reabrir() {
+        if (this.status == StatusChamado.FINALIZADO) {
+            throw new IllegalStateException("Chamado finalizado não pode ser reaberto.");
+        }
+
+        if (this.status == StatusChamado.CANCELADO) {
+            throw new IllegalStateException("Chamado cancelado não pode ser reaberto.");
+        }
+
+        if (this.status != StatusChamado.RESOLVIDO) {
+            throw new IllegalStateException("Somente chamados com status RESOLVIDO podem ser reabertos.");
+        }
+
+        this.status = StatusChamado.EM_ATENDIMENTO;
+        this.dataResolucao = null;
+
+        this.historicos.add(
+                new HistoricoChamado("Chamado reaberto", this)
+        );
+    }
+
     public void cancelar() {
 
-        validarNaoEncerrado();
+        if (this.status == StatusChamado.FINALIZADO) {
+            throw new IllegalStateException("Chamado finalizado não pode ser cancelado");
+        }
 
-        alterarStatus(StatusChamado.CANCELADO);
+        if (this.status == StatusChamado.CANCELADO) {
+            throw new IllegalStateException("Chamado já está cancelado");
+        }
 
+        if (this.status == StatusChamado.RESOLVIDO) {
+            throw new IllegalStateException("Chamados resolvidos não podem ser cancelados.");
+        }
+
+        this.status = StatusChamado.CANCELADO;
         this.dataFinalizacao = LocalDateTime.now();
 
-        this.adicionarHistorico("Chamado cancelado.");
+        this.historicos.add(
+                new HistoricoChamado("Chamado cancelado", this)
+        );
+
     }
 
     public void finalizarAutomaticamente() {
 
         if (this.status != StatusChamado.RESOLVIDO) {
-            return;
+            return; // sem ação se o status for resolvido
         }
 
         alterarStatus(StatusChamado.FINALIZADO);
         this.dataFinalizacao = LocalDateTime.now();
 
-        this.adicionarHistorico(
-                "Chamado finalizado automaticamente após 3 dias."
+        this.historicos.add(
+                new HistoricoChamado("Chamado finalizado automaticamente após 3 dias", this)
         );
     }
 

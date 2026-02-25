@@ -13,9 +13,9 @@ import com.felipe.centraldesk.domain.entity.Chamado;
 public interface ChamadoRepository extends JpaRepository<Chamado, Long> {
 
     @Query("""
-       SELECT c FROM Chamado c
-       WHERE c.status = 'RESOLVIDO'
-       AND c.dataResolucao <= :limite
-       """)
+        SELECT c FROM Chamado c
+        WHERE c.status = 'RESOLVIDO'
+        AND c.dataResolucao <= :limite
+    """)
     List<Chamado> buscarResolvidosAntesDe(LocalDateTime limite);
 }

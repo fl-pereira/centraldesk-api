@@ -56,6 +56,8 @@ Versão atual: **v0.2.0**
 ### Funcionalidades implementadas:
 
 - ✅ Criação de chamado
+- ✅ Reabertura de chamado
+- ✅ Finalização automática após 3 dias
 - ✅ Atribuição de analista (com validação de grupo)
 - ✅ Resolução de chamado com controle de estado
 - ✅ Histórico automático de alterações
