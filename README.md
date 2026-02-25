@@ -4,11 +4,14 @@
 Desenvolvido por [Felipe Pereira](https://www.linkedin.com/in/felipeluizpereira/)
 
 ## Stack
-- Java 17
-- Spring Boot
-- Spring Security
+
+- Java 17+
+- Spring Boot 3.4.3
+- Spring Data JPA
 - PostgreSQL
-- Swagger
+- Spring Security
+- SpringDoc OpenAPI 2.8.5
+- Maven
 
 ## Arquitetura
 - REST API
@@ -26,29 +29,36 @@ Desenvolvido por [Felipe Pereira](https://www.linkedin.com/in/felipeluizpereira/
     - Chamado
     - HistoricoChamado
 
+
 - Relacionamentos:
     - Analista pertence a múltiplos grupos
     - Chamado pertence a um grupo
     - Chamado possui histórico de alterações
 
+## Ciclo de Vida do Chamado
+
+ABERTO → EM_ATENDIMENTO → RESOLVIDO → FINALIZADO
+
+Regras implementadas:
+
+- Chamado só pode ser assumido por analista pertencente ao grupo.
+- Chamado só pode ser resolvido se estiver EM_ATENDIMENTO.
+- Histórico é registrado automaticamente a cada transição.
+
 ## Segurança
 Spring Security configurado com autenticação padrão para ambiente de desenvolvimento.
 
 
-## ✅ Status do projeto
+## 🚀 Status do Projeto
 
-**23/02/2026**  
-- ✔ Backend estruturado e operacional
+Versão atual: **v0.2.0**
 
-**24/02/2026**
-- ✔ API REST operacional
-- ✔ Criação de chamado funcionando
-- ✔ Persistência PostgreSQL validada
-- ✔ Histórico automático na criação
-- ✔ Swagger documentando endpoints
+### Funcionalidades implementadas:
 
-Próximos passos
-- Implementar DTO de resposta
-- Padronizar retorno da API
-- Criar tratamento global de exceções
-- Implementar regras avançadas de fluxo
+- ✅ Criação de chamado
+- ✅ Atribuição de analista (com validação de grupo)
+- ✅ Resolução de chamado com controle de estado
+- ✅ Histórico automático de alterações
+- ✅ Tratamento global de exceções (404 / 409)
+- ✅ Documentação automática via Swagger (SpringDoc)
+- ✅ Stack estabilizada com Spring Boot 3.4.3
