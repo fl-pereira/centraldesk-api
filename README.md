@@ -35,9 +35,20 @@ Desenvolvido por [Felipe Pereira](https://www.linkedin.com/in/felipeluizpereira/
 Spring Security configurado com autenticação padrão para ambiente de desenvolvimento.
 
 
-## Status do projeto
+## ✅ Status do projeto
 
 **23/02/2026**  
-Backend estruturado e operacional
+- ✔ Backend estruturado e operacional
 
-*Próximo passo: implementação das regras de negócio e fluxo completo de chamados.*
+**24/02/2026**
+- ✔ API REST operacional
+- ✔ Criação de chamado funcionando
+- ✔ Persistência PostgreSQL validada
+- ✔ Histórico automático na criação
+- ✔ Swagger documentando endpoints
+
+Próximos passos
+- Implementar DTO de resposta
+- Padronizar retorno da API
+- Criar tratamento global de exceções
+- Implementar regras avançadas de fluxo

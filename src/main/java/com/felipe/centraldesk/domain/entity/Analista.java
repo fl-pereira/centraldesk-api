@@ -21,8 +21,13 @@ public class Analista {
     @OneToMany(mappedBy = "analista")
     private List<Chamado> chamadosEmAtendimento = new ArrayList<>();
 
-    @ManyToMany(mappedBy = "analistas")
-    private List<Grupo> grupos = new ArrayList<>();
+    @ManyToMany
+    @JoinTable(
+            name = "analista_grupo",
+            joinColumns = @JoinColumn(name = "analista_id"),
+            inverseJoinColumns = @JoinColumn(name = "grupo_id")
+    )
+    private List<Grupo> grupos;
 
     protected Analista() {}
 
@@ -41,5 +46,9 @@ public class Analista {
 
     public String getEmail() {
         return email;
+    }
+
+    public List<Grupo> getGrupos() {
+        return grupos;
     }
 }

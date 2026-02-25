@@ -22,11 +22,12 @@ public class Grupo {
             joinColumns = @JoinColumn(name = "grupo_id"),
             inverseJoinColumns = @JoinColumn(name = "analista_id")
     )
-    private List<Analista> analistas = new ArrayList<>();
 
     // Um grupo pode ter vários chamados
-    @OneToMany(mappedBy = "grupo")
     private List<Chamado> chamados = new ArrayList<>();
+
+    @ManyToMany(mappedBy = "grupos")
+    private List<Analista> analistas;
 
     protected Grupo() {}
 

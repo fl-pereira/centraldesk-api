@@ -17,6 +17,8 @@ public class CriarChamadoRequest {
     @Schema(example = "1")
     private Long grupoId;
 
+    public CriarChamadoRequest(){}
+
     public String getTitulo() { return titulo; }
     public String getDescricao() { return descricao; }
     public Long getUsuarioId() { return usuarioId; }
