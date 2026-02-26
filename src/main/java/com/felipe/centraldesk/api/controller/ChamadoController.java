@@ -2,10 +2,15 @@ package com.felipe.centraldesk.api.controller;
 
 import com.felipe.centraldesk.api.dto.ChamadoResponse;
 import com.felipe.centraldesk.api.dto.CriarChamadoRequest;
+import com.felipe.centraldesk.domain.enums.StatusChamado;
 import com.felipe.centraldesk.domain.service.ChamadoService;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import jakarta.validation.Valid;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -27,19 +32,18 @@ public class ChamadoController {
     )
     @ApiResponse(responseCode = "200", description = "Chamado criado com sucesso")
     @PostMapping
-    public ChamadoResponse criar(@RequestBody CriarChamadoRequest request) {
+    public ResponseEntity<ChamadoResponse> criar(
+            @Valid @RequestBody CriarChamadoRequest request) {
 
-        return service.criar(
-                request.getTitulo(),
-                request.getDescricao(),
-                request.getUsuarioId(),
-                request.getGrupoId()
-        );
+        return ResponseEntity.status(HttpStatus.CREATED)
+                .body(service.criar(request));
     }
 
     @GetMapping
-    public ResponseEntity<List<ChamadoResponse>> listar() {
-        return ResponseEntity.ok(service.listarTodos());
+    public ResponseEntity<Page<ChamadoResponse>> listar(
+            @RequestParam(required = false) StatusChamado status,
+            Pageable pageable) {
+        return ResponseEntity.ok(service.listar(status, pageable));
     }
 
     @GetMapping("/{id}")

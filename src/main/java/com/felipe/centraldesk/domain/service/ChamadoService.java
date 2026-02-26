@@ -1,6 +1,8 @@
 package com.felipe.centraldesk.domain.service;
 
+import com.felipe.centraldesk.api.dto.CriarChamadoRequest;
 import com.felipe.centraldesk.domain.entity.Analista;
+import com.felipe.centraldesk.domain.enums.StatusChamado;
 import com.felipe.centraldesk.domain.exception.RecursoNaoEncontradoException;
 import com.felipe.centraldesk.domain.repository.UsuarioRepository;
 import org.springframework.stereotype.Service;
@@ -16,6 +18,8 @@ import com.felipe.centraldesk.domain.entity.Grupo;
 
 import com.felipe.centraldesk.api.dto.ChamadoResponse;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -40,18 +44,34 @@ public class ChamadoService {
     }
 
     @Transactional
-    public ChamadoResponse criar(String titulo, String descricao, Long usuarioId, Long grupoId) {
+    public ChamadoResponse criar(CriarChamadoRequest request) {
 
-        Usuario usuario = usuarioRepository.findById(usuarioId)
+        Usuario usuario = usuarioRepository.findById(request.getUsuarioId())
                 .orElseThrow(() -> new RuntimeException("Usuário não encontrado"));
 
-        Grupo grupo = grupoRepository.findById(grupoId)
+        Grupo grupo = grupoRepository.findById(request.getGrupoId())
                 .orElseThrow(() -> new RuntimeException("Grupo não encontrado"));
 
-        Chamado chamado = new Chamado(titulo, descricao, usuario, grupo);
+        Chamado chamado = new Chamado(
+                request.getTitulo(),
+                request.getDescricao(),
+                usuario,
+                grupo
+        );
 
-        Chamado salvo = chamadoRepository.save(chamado);
-        return toResponse(salvo);
+                return toResponse(chamadoRepository.save(chamado));
+    }
+
+    public Page<ChamadoResponse> listar(StatusChamado status, Pageable pageable){
+        Page<Chamado> page;
+
+        if (status != null) {
+            page = chamadoRepository.findByStatus(status, pageable);
+        } else {
+            page = chamadoRepository.findAll(pageable);
+        }
+
+        return page.map(this::toResponse);
     }
 
     public List<ChamadoResponse> listarTodos() {
@@ -112,7 +132,10 @@ public class ChamadoService {
 
     public void finalizarChamadosResolvidos() {
         LocalDateTime limite = LocalDateTime.now().minusDays(3);
-        List<Chamado> chamados = chamadoRepository.buscarResolvidosAntesDe(limite);
+        List<Chamado> chamados = chamadoRepository.buscarResolvidosAntesDe(
+                StatusChamado.RESOLVIDO,
+                limite
+        );
 
         for (Chamado chamado : chamados) {
             chamado.finalizarAutomaticamente();

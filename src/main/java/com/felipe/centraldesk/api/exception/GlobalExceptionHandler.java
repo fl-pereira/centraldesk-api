@@ -4,6 +4,7 @@ import com.felipe.centraldesk.api.dto.ErroResponse;
 import com.felipe.centraldesk.domain.exception.RecursoNaoEncontradoException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.*;
 
 @RestControllerAdvice
@@ -22,4 +23,4 @@ public class GlobalExceptionHandler {
                 .status(HttpStatus.CONFLICT)
                 .body(new ErroResponse(ex.getMessage()));
     }
-}
+ }
