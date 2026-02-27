@@ -48,6 +48,19 @@ Regras implementadas:
 ## Segurança
 Spring Security configurado com autenticação padrão para ambiente de desenvolvimento.
 
+## Testes Automatizados
+
+Foram implementados testes de integração utilizando:
+
+- SpringBootTest
+- MockMvc
+- Spring Security Test
+
+Cenários testados:
+- Criação de chamado (201)
+- Validação (400)
+- Recurso inexistente (404)
+- Autenticação (401)
 
 ## 🚀 Status do Projeto
 
