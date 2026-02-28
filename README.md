@@ -62,6 +62,16 @@ Cenários testados:
 - Recurso inexistente (404)
 - Autenticação (401)
 
+## Front-End
+### Integração Angular + Spring Boot
+
+- Consumo de API REST `/chamados`
+- Paginação via query params (`page`, `size`)
+- Renderização dinâmica com `@for`
+- Controle manual de change detection
+- Tratamento de CORS
+- Backend protegido por Spring Security (temporariamente liberado para desenvolvimento)
+
 ## 🚀 Status do Projeto
 
 Versão atual: **v0.2.0**

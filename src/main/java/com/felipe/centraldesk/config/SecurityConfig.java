@@ -10,20 +10,32 @@ import org.springframework.security.web.SecurityFilterChain;
 public class SecurityConfig {
 
     @Bean
-    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-
-    http
-            .csrf(csrf -> csrf.disable()) // API não usa CSRF
-            .authorizeHttpRequests(auth -> auth
-                    .requestMatchers(
-                            "/v3/api-docs/**",
-                            "/swagger-ui/**",
-                            "/swagger-ui.html"
-                    ).permitAll()
-                    .anyRequest().authenticated()
-            )
-            .httpBasic(Customizer.withDefaults()); // Basic Auth temporário
+    SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+        http
+                .csrf(csrf -> csrf.disable())
+                .cors(cors -> {})
+                .authorizeHttpRequests(auth -> auth
+                        .anyRequest().permitAll()
+                );
 
         return http.build();
     }
+
+    //@Bean
+    //public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+    //
+    //http
+    //       .csrf(csrf -> csrf.disable()) // API não usa CSRF
+    //       .authorizeHttpRequests(auth -> auth
+    //               .requestMatchers(
+    //                       "/v3/api-docs/**",
+    //                       "/swagger-ui/**",
+    //                       "/swagger-ui.html"
+    //               ).permitAll()
+    //              .anyRequest().authenticated()
+    //      )
+    //      .httpBasic(Customizer.withDefaults()); // Basic Auth temporário
+    //
+    //   return http.build();
+    //}
 }

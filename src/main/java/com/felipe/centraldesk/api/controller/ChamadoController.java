@@ -14,7 +14,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
 
 @RestController
 @RequestMapping("/chamados")
@@ -30,7 +29,7 @@ public class ChamadoController {
             summary = "Cria um novo chamado",
             description = "Cria um chamado vinculando a um usuário e grupo existente"
     )
-    @ApiResponse(responseCode = "200", description = "Chamado criado com sucesso")
+    @ApiResponse(responseCode = "201", description = "Chamado criado com sucesso")
     @PostMapping
     public ResponseEntity<ChamadoResponse> criar(
             @Valid @RequestBody CriarChamadoRequest request) {
