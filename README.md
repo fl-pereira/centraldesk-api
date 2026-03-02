@@ -70,6 +70,7 @@ Cenários testados:
 - Renderização dinâmica com `@for`
 - Controle manual de change detection
 - Tratamento de CORS
+- Reactive forms
 - Backend protegido por Spring Security (temporariamente liberado para desenvolvimento)
 
 ## 🚀 Status do Projeto
@@ -87,3 +88,7 @@ Versão atual: **v0.2.0**
 - ✅ Tratamento global de exceções (404 / 409)
 - ✅ Documentação automática via Swagger (SpringDoc)
 - ✅ Stack estabilizada com Spring Boot 3.4.3
+- ✅ Criação de chamado com validação via DTO
+- ✅ Redirecionamento automático após criação
+- ✅ Paginação com Spring Data (Pageable)
+- ✅ Filtro por status via query param
