@@ -8,12 +8,12 @@ import com.felipe.centraldesk.domain.service.ChamadoService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import jakarta.validation.Valid;
+import org.springdoc.core.annotations.ParameterObject;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
 
 @RestController
 @RequestMapping("/chamados")
@@ -59,17 +59,30 @@ public class ChamadoController {
     }
 
     @PatchMapping("/{id}/resolver")
-    public ResponseEntity<ChamadoResponse> resolver(@PathVariable Long id) {
-        return ResponseEntity.ok(service.resolverChamado(id));
+    public ResponseEntity<ChamadoResponse> resolver(
+            @PathVariable Long id,
+            @RequestParam long analistaId) {
+
+        return ResponseEntity.ok(service.resolverChamado(id, analistaId));
     }
 
     @PatchMapping("/{id}/cancelar")
-    public ResponseEntity<ChamadoResponse> cancelar(@PathVariable Long id) {
-        return ResponseEntity.ok(service.cancelarChamado(id));
+    public ResponseEntity<ChamadoResponse> cancelar(
+            @PathVariable Long id,
+            @RequestParam Long usuarioId) {
+        return ResponseEntity.ok(service.cancelarChamado(id, usuarioId));
     }
 
     @PatchMapping("/{id}/reabrir")
     public ResponseEntity<ChamadoResponse> reabrir(@PathVariable Long id) {
         return ResponseEntity.ok(service.reabrirChamado(id));
+    }
+
+    @GetMapping("/meus")
+    public ResponseEntity<Page<ChamadoResponse>> listarMeusChamados(
+            @RequestParam Long usuarioId,
+            @ParameterObject Pageable pageable){
+
+        return ResponseEntity.ok(service.listarPorUsuario(usuarioId, pageable));
     }
 }

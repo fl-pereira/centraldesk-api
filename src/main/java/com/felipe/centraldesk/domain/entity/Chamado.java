@@ -260,12 +260,8 @@ public class Chamado {
 
     public void assumir(Analista analista) {
 
-        if (this.status == StatusChamado.FINALIZADO) {
-            throw new IllegalStateException("Chamado já finalizado");
-        }
-
-        if (this.status == StatusChamado.CANCELADO) {
-            throw new IllegalStateException("Chamado cancelado não pode ser assumido");
+        if (this.status != StatusChamado.ABERTO) {
+            throw new IllegalStateException("Apenas chamados abertos podem ser atribuídos");
         }
 
         if (this.analista != null) {
@@ -284,22 +280,14 @@ public class Chamado {
         );
     }
 
-    public void resolver() {
-
-        if (this.status == StatusChamado.FINALIZADO) {
-            throw new IllegalStateException("Chamado já finalizado");
-        }
-
-        if (this.status == StatusChamado.CANCELADO) {
-            throw new IllegalStateException("Chamado cancelado não pode ser resolvido");
-        }
+    public void resolver(Long analistaId) {
 
         if (this.status != StatusChamado.EM_ATENDIMENTO) {
-            throw new IllegalStateException("Chamado precisa estar em atendimento para ser resolvido");
+            throw new IllegalStateException("Apenas chamados EM ATENDIMENTO podem ser resolvidos.");
         }
 
-        if (this.analista == null) {
-            throw new IllegalStateException("Chamado precisa ter analista para ser resolvido");
+        if (this.analista == null || !this.analista.getId().equals(analistaId)) {
+            throw new IllegalStateException("Apenas o analista responsável pode resolver o chamado.");
         }
 
         this.status = StatusChamado.RESOLVIDO;
@@ -308,5 +296,8 @@ public class Chamado {
         this.historicos.add(
                 new HistoricoChamado("Chamado resolvido", this)
         );
+
+        System.out.println("Analista do chamado: " + this.analista.getId() + " " + this.analista.getNome());
+        System.out.println("Analista tentando resolver: " + analistaId);
     }
 }

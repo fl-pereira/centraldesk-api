@@ -5,8 +5,14 @@ import com.felipe.centraldesk.domain.entity.Analista;
 import com.felipe.centraldesk.domain.enums.StatusChamado;
 import com.felipe.centraldesk.domain.exception.RecursoNaoEncontradoException;
 import com.felipe.centraldesk.domain.repository.UsuarioRepository;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.web.server.ResponseStatusException;
+import java.time.LocalDateTime;
+import java.util.List;
 
 import com.felipe.centraldesk.domain.repository.ChamadoRepository;
 import com.felipe.centraldesk.domain.repository.GrupoRepository;
@@ -17,11 +23,6 @@ import com.felipe.centraldesk.domain.entity.Usuario;
 import com.felipe.centraldesk.domain.entity.Grupo;
 
 import com.felipe.centraldesk.api.dto.ChamadoResponse;
-
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
-import java.time.LocalDateTime;
-import java.util.List;
 
 @Service
 public class ChamadoService {
@@ -74,11 +75,10 @@ public class ChamadoService {
         return page.map(this::toResponse);
     }
 
-    public List<ChamadoResponse> listarTodos() {
-        return chamadoRepository.findAll()
-                .stream()
-                .map(this::toResponse)
-                .toList();
+    public Page<ChamadoResponse> listarPorUsuario(Long usuarioId, Pageable pageable){
+        Page<Chamado> page = chamadoRepository.findByUsuarioId(usuarioId, pageable);
+
+        return page.map(this::toResponse);
     }
 
     public ChamadoResponse buscarPorId(Long id) {
@@ -103,12 +103,12 @@ public class ChamadoService {
     }
 
     @Transactional
-    public ChamadoResponse resolverChamado(Long chamadoId) {
+    public ChamadoResponse resolverChamado(Long chamadoId, Long analistaId) {
 
         Chamado chamado = chamadoRepository.findById(chamadoId)
                 .orElseThrow(() -> new RecursoNaoEncontradoException("Chamado não encontrado"));
 
-        chamado.resolver();
+        chamado.resolver(analistaId);
         return toResponse(chamado);
     }
 
@@ -122,9 +122,15 @@ public class ChamadoService {
     }
 
     @Transactional
-    public ChamadoResponse cancelarChamado(Long chamadoId) {
+    public ChamadoResponse cancelarChamado(Long chamadoId, Long usuarioId) {
         Chamado chamado = chamadoRepository.findById(chamadoId)
                 .orElseThrow(() -> new RecursoNaoEncontradoException("Chamado não encontrado"));
+
+        if (!chamado.getUsuario().getId().equals(usuarioId)) {
+            throw new ResponseStatusException(
+                    HttpStatus.FORBIDDEN,
+                    "Usuário não pode cancelar chamado que não lhe pertence.");
+        }
 
         chamado.cancelar();
         return toResponse(chamado);

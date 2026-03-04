@@ -26,4 +26,7 @@ public interface ChamadoRepository extends JpaRepository<Chamado, Long> {
             LocalDateTime limite);
 
     Page<Chamado> findByStatus(StatusChamado status, Pageable pageable);
+
+    Page<Chamado> findByUsuarioId(Long usuarioId, Pageable pageable);
+
 }
